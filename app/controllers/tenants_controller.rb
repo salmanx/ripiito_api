@@ -1,51 +1,28 @@
+# frozen_string_literal: true
+
 class TenantsController < ApplicationController
-  before_action :set_tenant, only: %i[ show update destroy ]
-
-  # GET /tenants
-  def index
-    @tenants = Tenant.all
-
-    render json: @tenants
-  end
-
-  # GET /tenants/1
   def show
+    @tenant = Tenant.find(params.expect(:id))
     render json: @tenant
   end
 
-  # POST /tenants
   def create
-    @tenant = Tenant.new(tenant_params)
+    op = Tenants::CreateTenantOp.submit(tenant_params)
 
-    if @tenant.save
-      render json: @tenant, status: :created, location: @tenant
+    if op.success?
+      render json: Tenants::TenantBlueprint.render(op.tenant), status: :created
     else
-      render json: @tenant.errors, status: :unprocessable_entity
+      render_error_response(op.errors, 409)
     end
-  end
-
-  # PATCH/PUT /tenants/1
-  def update
-    if @tenant.update(tenant_params)
-      render json: @tenant
-    else
-      render json: @tenant.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /tenants/1
-  def destroy
-    @tenant.destroy!
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_tenant
-      @tenant = Tenant.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def tenant_params
-      params.expect(tenant: [ :name, :ip, :location, :lat_lon, :url, :description ])
-    end
+  def tenant_params
+    params.expect(tenant: %i[name ip location lat_lon url])
+  end
+
+  def format_errors(errors)
+    errors.messages.transform_values { |msgs| [msgs.first] }
+  end
 end

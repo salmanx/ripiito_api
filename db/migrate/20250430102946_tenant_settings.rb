@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TenantSettings < ActiveRecord::Migration[8.0]
   def change
-    create_table :tenant_settings  do |t|
+    create_table :tenant_settings do |t|
       t.string :logo_url, null: true
       t.string :favicon_url, null: true
       t.string :text_color, null: true, limit: 25
