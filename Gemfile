@@ -28,4 +28,13 @@ group :development, :test do
   gem 'dotenv'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
+
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rspec-rails'
+end
+
+group :test do
+  gem 'database_cleaner-active_record'
+  gem 'shoulda-matchers'
 end

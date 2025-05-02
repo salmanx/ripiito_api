@@ -56,7 +56,7 @@ module Tenants
 
       IPAddr.new(ip)
     rescue IPAddr::InvalidAddressError
-      errors.add(:ip, 'must provide a valid ip')
+      errors.add(:ip, 'must be a valid ip')
     end
 
     def validate_lat_lon_cordinates(lat_lon)
