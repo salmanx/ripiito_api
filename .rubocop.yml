@@ -83,6 +83,3 @@ Metrics/ClassLength:
 
 Style/Documentation:
   Enabled: false
-
-Metrics/AbcSize:
-  Enabled: false

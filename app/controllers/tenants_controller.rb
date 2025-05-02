@@ -10,7 +10,7 @@ class TenantsController < ApplicationController
     op = Tenants::CreateTenantOp.submit(tenant_params)
 
     if op.success?
-      render json: Tenants::TenantBlueprint.render(op.tenant), status: :created
+      render json: TenantBlueprint.render(op.tenant), status: :created
     else
       render_error_response(op.errors, 409)
     end
