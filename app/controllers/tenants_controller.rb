@@ -21,8 +21,4 @@ class TenantsController < ApplicationController
   def tenant_params
     params.expect(tenant: %i[name ip location lat_lon url])
   end
-
-  def format_errors(errors)
-    errors.messages.transform_values { |msgs| [msgs.first] }
-  end
 end

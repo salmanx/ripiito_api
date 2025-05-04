@@ -40,11 +40,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_102946) do
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "name", limit: 40
     t.string "slug", limit: 80
-    t.string "ip", limit: 20
+    t.string "ip", limit: 60
     t.string "location"
     t.jsonb "lat_lon", default: {"lan" => 0, "lat" => 0}
-    t.string "url", limit: 40
+    t.string "url", limit: 40, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["url"], name: "index_tenants_on_url", unique: true
+    t.index ["uuid"], name: "index_tenants_on_uuid", unique: true
   end
 end

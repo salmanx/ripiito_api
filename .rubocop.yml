@@ -1,12 +1,7 @@
-# .rubocop.yml
-
-# inherit_gem:
-#   rubocop-rails-omakase: rubocop.yml
 require:
   - rubocop-rails
 
 AllCops:
-  # NewCops: enable
   Exclude:
     - "db/schema.rb"
     - "db/queue_schema.rb"
