@@ -32,9 +32,9 @@ module Tenants
 
     def new_tenant
       Tenant.new(
-        name: name,
+        name:,
+        location:,
         ip: ip,
-        location: location,
         url: url,
       )
     end

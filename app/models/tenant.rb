@@ -7,4 +7,6 @@ class Tenant < ApplicationRecord
   validates :ip, length: { minimum: 12, maximum: 40 }, allow_nil: true
   validates :location, length: { minimum: 3, maximum: 250 }, allow_nil: true
   validates :url, presence: true, length: { minimum: 12, maximum: 60 }, uniqueness: true
+
+  has_many :plans, dependent: :destroy
 end

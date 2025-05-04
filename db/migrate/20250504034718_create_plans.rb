@@ -5,8 +5,8 @@ class CreatePlans < ActiveRecord::Migration[8.0]
     create_table :plans do |t|
       t.string :name, limit: 100, null: false
       t.string :slug, limit: 200
-      t.column :status, :plan_status, default: 'DRAFT', null: false
       t.integer :billing_period
+      t.column :status, :plan_status, default: 'DRAFT', null: false
       t.column :billing_period_unit, :plan_billing_period_unit, default: 'MONTH', null: false
       t.integer :duration, null: false
       t.boolean :auto_renewable, default: false
