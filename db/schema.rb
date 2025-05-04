@@ -10,12 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_30_102946) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_04_034718) do
   create_schema "my_crypto"
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "billing_period_unit", ["DAY", "WEEK", "MONTH", "YEAR"]
+  create_enum "currency_code", ["JPY", "USD", "EUR"]
+  create_enum "plan_billing_period_unit", ["DAY", "WEEK", "MONTH", "YEAR"]
+  create_enum "plan_status", ["DRAFT", "ACTIVE", "RETIRED"]
+
+  create_table "plans", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.string "slug", limit: 200
+    t.enum "status", default: "DRAFT", null: false, enum_type: "plan_status"
+    t.integer "billing_period"
+    t.enum "billing_period_unit", default: "MONTH", null: false, enum_type: "plan_billing_period_unit"
+    t.integer "duration", null: false
+    t.boolean "auto_renewable", default: false
+    t.boolean "cancelable", default: true
+    t.float "base_price", default: 0.0, null: false
+    t.integer "trial_days", default: 0
+    t.boolean "is_price_visible", default: true
+    t.enum "currency", default: "JPY", null: false, enum_type: "currency_code"
+    t.integer "max_subscriber"
+    t.boolean "taxable", default: false
+    t.float "tax_fee", default: 0.0
+    t.jsonb "geo_availability"
+    t.jsonb "metadata"
+    t.boolean "exclusive", default: true
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id", "slug"], name: "index_plans_on_tenant_id_and_slug", unique: true
+    t.index ["tenant_id"], name: "index_plans_on_tenant_id"
+  end
 
   create_table "tenant_settings", force: :cascade do |t|
     t.string "logo_url"
@@ -29,22 +62,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_102946) do
     t.string "meta_author", limit: 20
     t.string "meta_description", limit: 100
     t.string "meta_keywords", limit: 100
-    t.bigint "tenants_id"
+    t.bigint "tenant_id"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tenants_id"], name: "index_tenant_settings_on_tenants_id"
+    t.index ["tenant_id"], name: "index_tenant_settings_on_tenant_id"
   end
 
   create_table "tenants", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "name", limit: 40
     t.string "slug", limit: 80
-    t.string "ip", limit: 20
+    t.string "ip", limit: 60
     t.string "location"
     t.jsonb "lat_lon", default: {"lan" => 0, "lat" => 0}
-    t.string "url", limit: 40
+    t.string "url", limit: 60, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["url"], name: "index_tenants_on_url", unique: true
+    t.index ["uuid"], name: "index_tenants_on_uuid", unique: true
   end
+
+  add_foreign_key "plans", "tenants"
+  add_foreign_key "tenant_settings", "tenants"
 end

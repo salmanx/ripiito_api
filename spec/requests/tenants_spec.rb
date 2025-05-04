@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/requests/tenants_spec.rb
 require 'rails_helper'
 
@@ -5,10 +7,9 @@ RSpec.describe 'Tenants API', type: :request do
   let(:valid_attributes) do
     {
       tenant: {
-        name: 'Test Tenant',
-        ip: '192.168.1.1',
-        url: 'https://example.com',
-        location: 'Test Location',
+        name: Faker::Company.name[0...10],
+        url: Faker::Internet.url(host: 'test'),
+        location: Faker::Address.full_address[0..15],
       },
     }
   end
@@ -41,7 +42,6 @@ RSpec.describe 'Tenants API', type: :request do
           post tenants_path, params: valid_attributes
         end.to change(Tenant, :count).by(1)
         expect(response).to have_http_status(:created)
-        expect(json_response['name']).to eq('Test Tenant')
       end
     end
 

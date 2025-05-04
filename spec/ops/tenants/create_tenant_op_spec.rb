@@ -1,12 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Tenants::CreateTenantOp do
   let(:valid_params) do
     {
-      name: 'Test Tenant',
-      ip: '192.168.1.1',
-      url: 'https://example.com',
-      location: 'Test Location',
+      name: Faker::Company.name[0...10],
+      url: Faker::Internet.url(host: 'test'),
+      location: Faker::Address.full_address[0..15],
     }
   end
 
@@ -27,9 +28,9 @@ RSpec.describe Tenants::CreateTenantOp do
       end
 
       it 'fails with no IP passed' do
-        op = described_class.submit(valid_params.merge(ip: ''))
+        op = described_class.submit(valid_params.merge(ip: '121.1.test'))
         expect(op).to be_failure
-        expect(op.errors[:ip]).to include('must provide an ip')
+        expect(op.errors[:ip]).to include('must be a valid ip')
       end
 
       it 'fails with missing name' do

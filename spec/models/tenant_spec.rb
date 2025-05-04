@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Tenant, type: :model do
@@ -5,10 +7,10 @@ RSpec.describe Tenant, type: :model do
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_length_of(:name).is_at_least(2).is_at_most(40) }
-  it { is_expected.to validate_presence_of(:ip) }
+  it { is_expected.to validate_length_of(:ip).is_at_least(12).is_at_most(40).allow_nil }
   it { is_expected.to validate_length_of(:location).is_at_least(3).is_at_most(250).allow_nil }
   it { is_expected.to validate_presence_of(:url) }
-  it { is_expected.to validate_length_of(:url).is_at_least(12).is_at_most(40) }
+  it { is_expected.to validate_length_of(:url).is_at_least(12).is_at_most(60) }
 
   describe '#generate_slug' do
     let(:tenant) { build(:tenant, name: 'Test Tenant') }

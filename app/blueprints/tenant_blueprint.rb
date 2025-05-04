@@ -11,6 +11,5 @@ class TenantBlueprint < Blueprint
     :location,
     :lat_lon,
     :url,
-    :created_at,
   )
 end

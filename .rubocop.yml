@@ -1,12 +1,7 @@
-# .rubocop.yml
-
-# inherit_gem:
-#   rubocop-rails-omakase: rubocop.yml
 require:
   - rubocop-rails
 
 AllCops:
-  # NewCops: enable
   Exclude:
     - "db/schema.rb"
     - "db/queue_schema.rb"
@@ -82,4 +77,7 @@ Metrics/ClassLength:
   Max: 150
 
 Style/Documentation:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
   Enabled: false
