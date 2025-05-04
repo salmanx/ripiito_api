@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe TenantsController, type: :controller do
@@ -16,10 +18,10 @@ RSpec.describe TenantsController, type: :controller do
       let(:valid_params) do
         {
           tenant: {
-            name: 'New Tenant',
-            ip: '192.168.1.1',
-            url: 'https://example.com',
-            location: 'New Location',
+            name: Faker::Company.name[0...10],
+            url: Faker::Internet.url(host: 'test'),
+            ip: '124.127.127.124',
+            location: Faker::Address.full_address[0..15],
           },
         }
       end

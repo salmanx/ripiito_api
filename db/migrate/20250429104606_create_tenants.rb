@@ -9,7 +9,7 @@ class CreateTenants < ActiveRecord::Migration[8.0]
       t.string :ip, limit: 60
       t.string :location
       t.jsonb :lat_lon, default: { lat: 0, lan: 0 }
-      t.string :url, null: false,  limit: 40, index: { unique: true }
+      t.string :url, null: false,  limit: 60, index: { unique: true }
 
       t.timestamps
     end

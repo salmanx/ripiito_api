@@ -2,8 +2,8 @@
 
 class TenantsController < ApplicationController
   def show
-    @tenant = Tenant.find(params.expect(:id))
-    render json: @tenant
+    tenant = Tenant.find(params.expect(:id))
+    render json: TenantBlueprint.render(tenant), status: :ok
   end
 
   def create

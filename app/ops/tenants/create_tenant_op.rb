@@ -5,8 +5,7 @@ require 'ipaddr'
 module Tenants
   class CreateTenantOp < Op
     string :name
-    # default is required, otherwise IPAddr.new() will throw error if ip not passed
-    string :ip, default: ''
+    string :ip
     string :location
     # object :lat_lon
     string :url
@@ -17,7 +16,7 @@ module Tenants
 
     def perform
       validate_url url
-      validate_ip ip
+      validate_ip(ip) if ip.present?
 
       tenant = new_tenant
 
@@ -52,8 +51,6 @@ module Tenants
     end
 
     def validate_ip(ip)
-      errors.add(:ip, 'must provide an ip') && return if ip.blank?
-
       IPAddr.new(ip)
     rescue IPAddr::InvalidAddressError
       errors.add(:ip, 'must be a valid ip')
