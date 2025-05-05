@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class PlansController < ApplicationController
+  def show
+    plan = Plan.find(params.expect(:id))
+    render json: PlanBlueprint.render(plan)
+  end
+
   def create
     op = Plans::CreatePlanOp.submit(plan_params)
 

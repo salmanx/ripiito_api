@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  def render_error_response(errors, status)
-    render json: ErrorBlueprint.render({ errors: errors, status: status }), status: status
-  end
+  include ErrorHandler
+  rescue_from ActiveRecord::RecordNotFound, with: :render_record_not_found_response
 end
