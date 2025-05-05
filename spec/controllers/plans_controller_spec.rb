@@ -2,14 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe TenantsController, type: :controller do
+RSpec.describe PlansController, type: :controller do
+  let(:plan) { create(:plan) }
   let(:tenant) { create(:tenant) }
 
   describe 'GET #show' do
-    it 'returns the tenant' do
-      get :show, params: { id: tenant.id }
+    it 'returns the plan' do
+      get :show, params: { id: plan.id }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['uuid']).to eq(tenant.uuid)
+      expect(JSON.parse(response.body)['name']).to eq(plan.name)
     end
   end
 
@@ -17,19 +18,21 @@ RSpec.describe TenantsController, type: :controller do
     context 'with valid params' do
       let(:valid_params) do
         {
-          tenant: {
+          plan: {
             name: Faker::Company.name[0...10],
-            url: Faker::Internet.url(host: 'test'),
-            ip: '124.127.127.124',
-            location: Faker::Address.full_address[0..15],
+            billing_period: 1,
+            billing_period_unit: 'MONTH',
+            duration: 120,
+            base_price: 1000.00,
+            tenant_id: tenant.id,
           },
         }
       end
 
-      it 'creates a new tenant' do
+      it 'creates a new plan' do
         expect do
           post :create, params: valid_params
-        end.to change(Tenant, :count).by(1)
+        end.to change(Plan, :count).by(1)
         expect(response).to have_http_status(:created)
       end
     end
@@ -37,11 +40,13 @@ RSpec.describe TenantsController, type: :controller do
     context 'with invalid params' do
       let(:invalid_params) do
         {
-          tenant: {
+          plan: {
             name: '',
-            ip: 'invalid',
-            url: 'invalid',
-            location: 'test location',
+            billing_period: nil,
+            billing_period_unit: '',
+            duration: 0,
+            base_price: 0,
+            tenant_id: tenant.id,
           },
         }
       end
@@ -50,7 +55,10 @@ RSpec.describe TenantsController, type: :controller do
         post :create, params: invalid_params
         expect(response).to have_http_status(:conflict)
         body = JSON.parse(response.body)
-        expect(body['errors'].keys).to include('name', 'ip', 'url')
+        # puts body['errors'].keys
+        expect(body['errors'].keys).to include(
+          'name', 'billing_period', 'billing_period_unit', 'base_price'
+        )
       end
     end
   end

@@ -14,5 +14,7 @@ FactoryBot.define do
     taxable { false }
     billing_period_unit { 'MONTH' }
     status { 'DRAFT' }
+
+    association :tenant
   end
 end
