@@ -20,10 +20,10 @@ RSpec.describe PlansController, type: :controller do
         {
           plan: {
             name: Faker::Company.name[0...10],
-            billing_period: 1,
-            billing_period_unit: 'MONTH',
+            # billing_period: 1,
+            # billing_period_unit: 'MONTH',
             duration: 120,
-            base_price: 1000.00,
+            # base_price: 1000.00,
             tenant_id: tenant.id,
           },
         }
@@ -42,10 +42,7 @@ RSpec.describe PlansController, type: :controller do
         {
           plan: {
             name: '',
-            billing_period: nil,
-            billing_period_unit: '',
             duration: 0,
-            base_price: 0,
             tenant_id: tenant.id,
           },
         }
@@ -57,7 +54,7 @@ RSpec.describe PlansController, type: :controller do
         body = JSON.parse(response.body)
         # puts body['errors'].keys
         expect(body['errors'].keys).to include(
-          'name', 'billing_period', 'billing_period_unit', 'base_price'
+          'name',
         )
       end
     end

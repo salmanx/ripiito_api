@@ -5,18 +5,18 @@ module Attributes
     PLAN_ATTRS = %i[
       name
       status
-      billing_period
-      billing_period_unit
       duration
       auto_renewable
       cancelable
-      base_price
       trial_days
-      is_price_visible
       currency
       max_subscriber
-      taxable
-      tax_fee
     ].freeze
   end
 end
+# base_price
+# tax_fee
+# taxable
+# is_price_visible
+# billing_period
+# billing_period_unit

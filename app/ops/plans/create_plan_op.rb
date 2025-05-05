@@ -6,19 +6,19 @@ module Plans
 
     string  :name
     string  :status, default: Enum::PlanEnum::STATUSES[:DRAFT]
-    string  :billing_period
-    string  :billing_period_unit
-    integer :billing_period
+    # string  :billing_period
+    # string  :billing_period_unit
+    # integer :billing_period
     integer :duration
     boolean :auto_renewable, default: false
     boolean :cancelable, default: true
-    float   :base_price, default: 0.0
+    # float   :base_price, default: 0.0
     integer :trial_days
-    boolean :is_price_visible, default: true
+    # boolean :is_price_visible, default: true
     string  :currency, default: Enum::PlanEnum::CURRENCY_CODE[:JPY]
     integer :max_subscriber
-    boolean :taxable, default: false
-    float   :tax_fee, default: 0.0
+    # boolean :taxable, default: false
+    # float   :tax_fee, default: 0.0
     integer :tenant_id
 
     outputs :plan
