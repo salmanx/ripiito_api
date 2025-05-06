@@ -11,12 +11,7 @@ module Attributes
       trial_days
       currency
       max_subscriber
+      exclusive
     ].freeze
   end
 end
-# base_price
-# tax_fee
-# taxable
-# is_price_visible
-# billing_period
-# billing_period_unit

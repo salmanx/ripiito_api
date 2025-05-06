@@ -8,13 +8,6 @@ module Enum
       RETIRED: 'RETIRED',
     }.freeze
 
-    BILLING_PERIOD_UNITS = {
-      DAY: 'DAY',
-      WEEK: 'WEEK',
-      MONTH: 'MONTH',
-      YEAR: 'YEAR',
-    }.freeze
-
     CURRENCY_CODE = {
       JPY: 'JPY',
       USD: 'USD',
