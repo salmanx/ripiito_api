@@ -19,24 +19,6 @@ class PlansController < ApplicationController
   private
 
   def plan_params
-    params.expect(
-      plan: %i[
-        name
-        status
-        billing_period
-        billing_period_unit
-        duration
-        auto_renewable
-        cancelable
-        base_price
-        trial_days
-        is_price_visible
-        currency
-        max_subscriber
-        taxable
-        tax_fee
-        tenant_id
-      ],
-    )
+    params.expect(plan: Attributes::PlanAttributes::PLAN_ATTRS + [:tenant_id])
   end
 end

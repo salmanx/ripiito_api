@@ -6,10 +6,7 @@ RSpec.describe Plans::CreatePlanOp do
   let(:valid_params) do
     {
       name: Faker::Company.name[0...10],
-      billing_period: 1,
-      billing_period_unit: 'MONTH',
       duration: 120,
-      base_price: 1000.00,
       tenant_id: tenant.id,
     }
   end
@@ -29,12 +26,6 @@ RSpec.describe Plans::CreatePlanOp do
       op = described_class.submit(valid_params.merge(name: ''))
       expect(op).to be_failure
       expect(op.errors[:name]).to include("can't be blank")
-    end
-
-    it 'validates billing_period_unit' do
-      op = described_class.submit(valid_params.merge(billing_period_unit: 'NOT_A_UNIT'))
-      expect(op).to be_failure
-      expect(op.errors[:billing_period_unit]).to include('is not included in the list')
     end
 
     it 'validates tenant' do

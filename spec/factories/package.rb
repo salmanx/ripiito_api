@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :plan do
+  factory :package do
     name { Faker::Company.name[0...10] }
     billing_period { 1 }
-    duration { 90 }
+    billing_period_unit { 'MONTH' }
     auto_renewable { false }
     cancelable { true }
     base_price { 100.00 }
-    trial_days { 3 }
-    is_price_visible { true }
-    currency { 'JPY' }
-    taxable { false }
-    billing_period_unit { 'MONTH' }
     status { 'DRAFT' }
+    package_type { 'REQUIRED' }
+    pricing_model { 'FIXED' }
+    pricing_type { 'RECURRING' }
 
-    association :tenant
+    association :plan
   end
 end
