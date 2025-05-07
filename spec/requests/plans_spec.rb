@@ -9,10 +9,7 @@ RSpec.describe 'Plans API', type: :request do
     {
       plan: {
         name: Faker::Company.name[0...10],
-        # billing_period: 1,
-        # billing_period_unit: 'MONTH',
         duration: 120,
-        # base_price: 1000.00,
         tenant_id: tenant.id,
       },
     }
@@ -22,10 +19,7 @@ RSpec.describe 'Plans API', type: :request do
     {
       plan: {
         name: '',
-        # billing_period: nil,
-        # billing_period_unit: '',
         duration: 0,
-        # base_price: 0,
         tenant_id: tenant.id,
       },
     }

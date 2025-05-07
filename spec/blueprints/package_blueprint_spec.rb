@@ -2,22 +2,28 @@
 
 require 'rails_helper'
 
-RSpec.describe PlanBlueprint do
-  let(:plan) { create(:plan) }
-  let(:blueprint) { PlanBlueprint.render(plan) }
+RSpec.describe PackageBlueprint do
+  let(:package) { create(:package) }
+  let(:blueprint) { PackageBlueprint.render(package) }
   let(:parsed) { JSON.parse(blueprint) }
 
   it 'includes the correct fields' do
     expect(parsed).to include(
       'name',
       'status',
-      'slug',
-      'duration',
       'auto_renewable',
       'cancelable',
       'trial_days',
-      'currency',
       'max_subscriber',
+      'base_price',
+      'tax_fee',
+      'taxable',
+      'is_price_visible',
+      'billing_period',
+      'billing_period_unit',
+      'pricing_type',
+      'pricing_model',
+      'package_type',
       'exclusive',
       'created_at',
       'updated_at',
