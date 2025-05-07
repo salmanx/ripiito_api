@@ -17,8 +17,6 @@ RSpec.describe ErrorBlueprint do
   it 'includes status and formatted errors' do
     expect(parsed).to include('status', 'errors')
     expect(parsed['status']).to eq(409)
-    # make sure always return first error from the errors array for particular error
-    expect(parsed['errors']['name']).to eq(["can't be blank"])
-    expect(parsed['errors']['name']).not_to eq(['is too short (minimum is 2 characters)'])
+    expect(parsed['errors']['name']).to eq(["name can't be blank", 'name is too short (minimum is 2 characters)'])
   end
 end
