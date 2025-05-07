@@ -32,13 +32,13 @@ RSpec.describe Packages::CreatePackageOp do
     it 'validates name' do
       op = described_class.submit(valid_params.merge(name: ''))
       expect(op).to be_failure
-      expect(op.errors[:name]).to include("can't be blank")
+      expect(op.errors[:name]).to include("name can't be blank")
     end
 
     it 'validates billing_period_unit' do
       op = described_class.submit(valid_params.merge(billing_period_unit: 'NOT_A_UNIT'))
       expect(op).to be_failure
-      expect(op.errors[:billing_period_unit]).to include('is not included in the list')
+      expect(op.errors[:billing_period_unit]).to include('billing_period_unit is not included in the list')
     end
 
     it 'validates plan' do

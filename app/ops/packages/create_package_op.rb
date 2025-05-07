@@ -37,7 +37,7 @@ module Packages
         package.save
         output :package, package
       else
-        package.errors.each { |e| errors.add(e.attribute, e.message) }
+        package.errors.each { |e| errors.add(e.attribute, "#{e.attribute} #{e.message}") }
       end
     end
   end

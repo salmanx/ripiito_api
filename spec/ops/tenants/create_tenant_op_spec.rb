@@ -24,19 +24,19 @@ RSpec.describe Tenants::CreateTenantOp do
       it 'fails with no URL passed' do
         op = described_class.submit(valid_params.merge(url: ''))
         expect(op).to be_failure
-        expect(op.errors[:url]).to include('must provide URL')
+        expect(op.errors[:url]).to include('url must provide URL')
       end
 
       it 'fails with no IP passed' do
         op = described_class.submit(valid_params.merge(ip: '121.1.test'))
         expect(op).to be_failure
-        expect(op.errors[:ip]).to include('must be a valid ip')
+        expect(op.errors[:ip]).to include('ip must be a valid ip')
       end
 
       it 'fails with missing name' do
         op = described_class.submit(valid_params.except(:name))
         expect(op).to be_failure
-        expect(op.errors[:name]).to include("can't be blank")
+        expect(op.errors[:name]).to include("name can't be blank")
       end
     end
   end
@@ -45,13 +45,13 @@ RSpec.describe Tenants::CreateTenantOp do
     it 'validates URL format' do
       op = described_class.submit(valid_params.merge(url: 'htt://invalid.com'))
       expect(op).to be_failure
-      expect(op.errors[:url]).to include('must be a valid URL')
+      expect(op.errors[:url]).to include('url must be a valid URL')
     end
 
     it 'validates IP format' do
       op = described_class.submit(valid_params.merge(ip: '10.20.0'))
       expect(op).to be_failure
-      expect(op.errors[:ip]).to include('must be a valid ip')
+      expect(op.errors[:ip]).to include('ip must be a valid ip')
     end
   end
 end
