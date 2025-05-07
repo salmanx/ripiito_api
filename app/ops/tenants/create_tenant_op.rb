@@ -61,12 +61,10 @@ module Tenants
         lat = lat_lon[:lat]
         lon = lat_lon[:lon]
 
-        unless lat.is_a?(Numeric) && lat.between?(-90, 90)
-          errors.add(:lat_lon, 'latitude lat must be a number between -90 and 90')
-        end
+        errors.add(:lat_lon, 'must be a number between -90 and 90') unless lat.is_a?(Numeric) && lat.between?(-90, 90)
 
         unless lon.is_a?(Numeric) && lon.between?(-180, 180)
-          errors.add(:lat_lon, 'longitude must be a number between -180 and 180')
+          errors.add(:lat_lon, 'must be a number between -180 and 180')
         end
       else
         errors.add(:lat_lon, 'latitude_longitude must be an object with lat and lon key')
