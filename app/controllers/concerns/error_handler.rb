@@ -5,12 +5,23 @@ module ErrorHandler
     model = exception.model&.underscore || 'record'
 
     render json: ErrorBlueprint.render(
+      errors: { model.to_sym => "#{model} doesn't exist" },
       status: 404,
-      errors: { model.to_sym => 'not found' },
     ), status: :not_found
   end
 
-  def render_error_response(errors, status)
-    render json: ErrorBlueprint.render({ errors: errors, status: status }), status: status
+  def render_error_response(errors)
+    render json: ErrorBlueprint.render({ errors: errors, status: 409 }), status: :conflict
+  end
+
+  def handle_parameter_missing(exception)
+    render json: ErrorBlueprint.render(
+      {
+        errors: {
+          message: exception.message,
+        },
+        status: 400,
+      },
+    ), status: :bad_request
   end
 end

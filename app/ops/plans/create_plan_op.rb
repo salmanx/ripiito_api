@@ -30,7 +30,7 @@ module Plans
         plan.save
         output :plan, plan
       else
-        plan.errors.each { |e| errors.add(e.attribute, e.message) }
+        plan.errors.each { |e| errors.add(e.attribute, "#{e.attribute} #{e.message}") }
       end
     end
   end

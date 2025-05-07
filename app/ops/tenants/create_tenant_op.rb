@@ -24,7 +24,7 @@ module Tenants
         tenant.save
         output :tenant, tenant
       else
-        tenant.errors.each { |e| errors.add(e.attribute, e.message) }
+        tenant.errors.each { |e| errors.add(e.attribute, "#{e.attribute} #{e.message}") }
       end
     end
 
@@ -40,20 +40,20 @@ module Tenants
     end
 
     def validate_url(url)
-      errors.add(:url, 'must provide URL') && return if url.blank?
+      errors.add(:url, 'url must provide URL') && return if url.blank?
 
       begin
         uri = URI.parse(url)
-        errors.add(:url, 'must be a valid URL') unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+        errors.add(:url, 'url must be a valid URL') unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
       rescue URI::InvalidURIError
-        errors.add(:url, 'must be a valid URL')
+        errors.add(:url, 'url must be a valid URL')
       end
     end
 
     def validate_ip(ip)
       IPAddr.new(ip)
     rescue IPAddr::InvalidAddressError
-      errors.add(:ip, 'must be a valid ip')
+      errors.add(:ip, 'ip must be a valid ip')
     end
 
     def validate_lat_lon_cordinates(lat_lon)
@@ -62,14 +62,14 @@ module Tenants
         lon = lat_lon[:lon]
 
         unless lat.is_a?(Numeric) && lat.between?(-90, 90)
-          errors.add(:lat_lon, 'lat must be a number between -90 and 90')
+          errors.add(:lat_lon, 'latitude lat must be a number between -90 and 90')
         end
 
         unless lon.is_a?(Numeric) && lon.between?(-180, 180)
-          errors.add(:lat_lon, 'lon must be a number between -180 and 180')
+          errors.add(:lat_lon, 'longitude must be a number between -180 and 180')
         end
       else
-        errors.add(:lat_lon, 'must be an object with lat and lon key')
+        errors.add(:lat_lon, 'latitude_longitude must be an object with lat and lon key')
       end
     end
   end

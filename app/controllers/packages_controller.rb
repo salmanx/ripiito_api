@@ -12,7 +12,7 @@ class PackagesController < ApplicationController
     if op.success?
       render json: PackageBlueprint.render(op.package), status: :created
     else
-      render_error_response(op.errors, 409)
+      render_error_response(op.errors)
     end
   end
 

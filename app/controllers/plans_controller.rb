@@ -12,7 +12,7 @@ class PlansController < ApplicationController
     if op.success?
       render json: PlanBlueprint.render(op.plan), status: :created
     else
-      render_error_response(op.errors, 409)
+      render_error_response(op.errors)
     end
   end
 

@@ -25,7 +25,7 @@ RSpec.describe Plans::CreatePlanOp do
     it 'validates name' do
       op = described_class.submit(valid_params.merge(name: ''))
       expect(op).to be_failure
-      expect(op.errors[:name]).to include("can't be blank")
+      expect(op.errors[:name]).to include("name can't be blank")
     end
 
     it 'validates tenant' do
