@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe PlansController, type: :controller do
+RSpec.describe PackagesController, type: :controller do
+  let(:package) { create(:package) }
   let(:plan) { create(:plan) }
-  let(:tenant) { create(:tenant) }
 
   describe 'GET #show' do
-    it 'returns the plan' do
-      get :show, params: { id: plan.id }
+    it 'returns the package' do
+      get :show, params: { id: package.id }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['name']).to eq(plan.name)
+      expect(JSON.parse(response.body)['name']).to eq(package.name)
     end
   end
 
@@ -18,18 +18,26 @@ RSpec.describe PlansController, type: :controller do
     context 'with valid params' do
       let(:valid_params) do
         {
-          plan: {
+          package: {
             name: Faker::Company.name[0...10],
-            duration: 120,
-            tenant_id: tenant.id,
+            billing_period: 1,
+            billing_period_unit: 'MONTH',
+            auto_renewable: false,
+            cancelable: true,
+            base_price: 100.00,
+            status: 'DRAFT',
+            package_type: 'REQUIRED',
+            pricing_model: 'FIXED',
+            pricing_type: 'RECURRING',
+            plan_id: plan.id,
           },
         }
       end
 
-      it 'creates a new plan' do
+      it 'creates a new package' do
         expect do
           post :create, params: valid_params
-        end.to change(Plan, :count).by(1)
+        end.to change(Package, :count).by(1)
         expect(response).to have_http_status(:created)
       end
     end
@@ -37,10 +45,9 @@ RSpec.describe PlansController, type: :controller do
     context 'with invalid params' do
       let(:invalid_params) do
         {
-          plan: {
+          package: {
             name: '',
-            duration: 0,
-            tenant_id: tenant.id,
+            plan_id: plan.id,
           },
         }
       end
