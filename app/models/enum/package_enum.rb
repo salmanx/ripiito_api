@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Enum
   module PackageEnum
     STATUSES = {
@@ -28,7 +30,7 @@ module Enum
       FIXED: 'FIXED',
       TIRED: 'TIRED',
       VOLUME: 'VOLUME',
-    }
+    }.freeze
 
     BILLING_PERIOD_UNITS = {
       DAY: 'DAY',

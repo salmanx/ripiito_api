@@ -5,6 +5,6 @@ class Blueprint < Blueprinter::Base
 
   fields(
     :created_at,
-    :updated_at
+    :updated_at,
   )
 end

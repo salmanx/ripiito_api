@@ -16,6 +16,7 @@ class TenantSettings < ActiveRecord::Migration[8.0]
       t.string :meta_keywords, null: true, limit: 100
       t.references :tenant, index: true, foreign_key: true
       t.text :description, null: true
+      t.bigint :created_by
 
       t.timestamps
     end

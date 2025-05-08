@@ -24,12 +24,14 @@ RSpec.describe PackagesController, type: :controller do
             billing_period_unit: 'MONTH',
             auto_renewable: false,
             cancelable: true,
-            base_price: 100.00,
             status: 'DRAFT',
             package_type: 'REQUIRED',
             pricing_model: 'FIXED',
             pricing_type: 'RECURRING',
             plan_id: plan.id,
+            package_price_attributes: {
+              price: 100,
+            },
           },
         }
       end
@@ -48,6 +50,9 @@ RSpec.describe PackagesController, type: :controller do
           package: {
             name: '',
             plan_id: plan.id,
+            package_price_attributes: {
+              price: 100,
+            },
           },
         }
       end

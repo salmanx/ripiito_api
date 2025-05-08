@@ -8,7 +8,7 @@ class ErrorBlueprint < Blueprinter::Base
 
     if raw_errors.respond_to?(:messages)
       raw_errors.messages.each_with_object({}) do |(key, messages), result|
-        result[key.to_sym] = messages.map { |msg| "#{key} #{msg}" }
+        result[key] = messages.map { |msg| "#{Utils::TextFormatter.clean_humanized_title(key)} #{msg}" }
       end
 
     else

@@ -10,6 +10,7 @@ class CreateTenants < ActiveRecord::Migration[8.0]
       t.string :location
       t.jsonb :lat_lon, default: { lat: 0, lan: 0 }
       t.string :url, null: false,  limit: 60, index: { unique: true }
+      t.bigint :created_by
 
       t.timestamps
     end

@@ -10,16 +10,21 @@ module Packages
     integer :billing_period
     boolean :auto_renewable, default: false
     boolean :cancelable, default: true
-    float   :base_price, default: 0.0
     integer :trial_days, default: 0
-    boolean :is_price_visible, default: true
     integer :max_subscriber
-    boolean :taxable, default: false
-    float   :tax_fee, default: 0.0
     string  :package_type
     string  :pricing_model
     string  :pricing_type
     boolean :exclusive, default: false
+
+    object :package_price_attributes do
+      decimal :price
+      decimal :tax_fee
+      boolean :taxable
+      boolean :is_price_visible
+      date :effective_from
+      date :effective_to
+    end
 
     integer :plan_id
 
@@ -28,10 +33,14 @@ module Packages
     protected
 
     def perform
-      plan = Plan.find(plan_id)
       attrs = extract_attributes(PACKAGE_ATTRS)
 
-      package = Package.new(attrs.merge(plan: plan))
+      package = Package.new(
+        attrs.merge(
+          plan_id: plan_id,
+          package_price_attributes: package_price_attributes,
+        ),
+      )
 
       if package.valid?
         package.save
