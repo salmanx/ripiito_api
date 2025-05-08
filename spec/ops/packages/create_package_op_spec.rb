@@ -15,6 +15,9 @@ RSpec.describe Packages::CreatePackageOp do
       pricing_model: 'FIXED',
       pricing_type: 'RECURRING',
       plan_id: plan.id,
+      package_price_attributes: {
+        price: 100,
+      },
     }
   end
 
@@ -43,13 +46,8 @@ RSpec.describe Packages::CreatePackageOp do
     end
 
     it 'validates plan' do
-      expect do
-        described_class.submit(valid_params.merge(plan_id: nil))
-      end.to raise_error(ActiveRecord::RecordNotFound)
-
-      expect do
-        described_class.submit(valid_params.merge(plan_id: 100))
-      end.to raise_error(ActiveRecord::RecordNotFound)
+      op = described_class.submit(valid_params.merge(plan_id: nil))
+      expect(op.errors[:plan]).to include('must exist')
     end
   end
 end
