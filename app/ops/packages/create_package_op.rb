@@ -16,8 +16,9 @@ module Packages
     string  :pricing_model
     string  :pricing_type
     boolean :exclusive, default: false
+    integer :plan_id
 
-    object :package_price_attributes do
+    object :package_price_attributes, null: true do
       decimal :price
       decimal :tax_fee
       boolean :taxable
@@ -26,7 +27,7 @@ module Packages
       date :effective_to
     end
 
-    integer :plan_id
+    validate :require_package_price_attributes
 
     outputs :package
 
@@ -48,6 +49,14 @@ module Packages
       else
         package.errors.each { |e| errors.add(e.attribute, e.message) }
       end
+    end
+
+    private
+
+    def require_package_price_attributes
+      return unless package_price_attributes.nil?
+
+      errors.add(:package_price, "can't be blank. It must be an object with price property.")
     end
   end
 end

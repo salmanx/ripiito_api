@@ -3,6 +3,7 @@
 module ErrorHandler
   extend ActiveSupport::Concern
 
+  # Handle if Model.find raise RecordNotFound exception
   def render_record_not_found_response(exception)
     model = exception.model&.underscore || 'record'
 
@@ -12,10 +13,12 @@ module ErrorHandler
     ), status: :not_found
   end
 
+  # Model validation error
   def render_error_response(errors)
     render json: ErrorBlueprint.render({ errors: errors, status: 409 }), status: :conflict
   end
 
+  # Handle if no params (empty body) passed in post request
   def handle_parameter_missing(exception)
     render json: ErrorBlueprint.render(
       {
@@ -27,6 +30,7 @@ module ErrorHandler
     ), status: :bad_request
   end
 
+  # Handle if no nested attributes passed
   def handle_argument_error(exception)
     render json: ErrorBlueprint.render(
       {

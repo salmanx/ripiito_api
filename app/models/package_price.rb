@@ -6,8 +6,8 @@ class PackagePrice < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :is_price_visible, inclusion: { in: [true, false] }, allow_nil: true
   validates :taxable, inclusion: { in: [true, false] }, allow_nil: true
-  validates :tax_fee, numericality: { greater_than: 0 }, presence: true, if: -> { taxable? }
   validate  :tax_fee_only_if_taxable
+  validates :tax_fee, numericality: { greater_than: 0 }, presence: true, if: -> { taxable? }
 
   belongs_to :package
 
