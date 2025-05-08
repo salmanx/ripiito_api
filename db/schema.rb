@@ -1,4 +1,16 @@
-ActiveRecord::Schema[8.0].define(version: 2025_05_05_064718) do
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema[8.0].define(version: 2025_05_07_120324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -14,18 +26,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064718) do
   create_enum "pricing_type", ["ONE_TIME", "RECURRING", "USAGE"]
   create_enum "product_type", ["PHYSICAL", "SERVICE", "DIGITAL"]
 
+  create_table "package_prices", force: :cascade do |t|
+    t.decimal "price", default: "0.0", null: false
+    t.boolean "is_price_visible", default: true
+    t.boolean "taxable", default: false
+    t.decimal "tax_fee", default: "0.0"
+    t.datetime "effective_from", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "effective_to"
+    t.bigint "package_id"
+    t.bigint "created_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["package_id"], name: "index_package_prices_on_package_id"
+  end
+
   create_table "packages", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "slug", limit: 200
     t.integer "billing_period"
     t.boolean "auto_renewable", default: false
     t.boolean "cancelable", default: true
-    t.float "base_price", default: 0.0, null: false
     t.integer "trial_days", default: 0
-    t.boolean "is_price_visible", default: true
     t.integer "max_subscriber"
-    t.boolean "taxable", default: false
-    t.float "tax_fee", default: 0.0
     t.jsonb "geo_availability"
     t.jsonb "metadata"
     t.boolean "exclusive", default: true
@@ -35,6 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064718) do
     t.enum "pricing_model", default: "FIXED", null: false, enum_type: "pricing_model"
     t.enum "package_type", default: "REQUIRED", null: false, enum_type: "package_type"
     t.bigint "plan_id"
+    t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["plan_id", "slug"], name: "index_packages_on_plan_id_and_slug", unique: true
@@ -55,6 +78,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064718) do
     t.boolean "exclusive", default: true
     t.enum "status", default: "DRAFT", null: false, enum_type: "plan_status"
     t.bigint "tenant_id"
+    t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tenant_id", "slug"], name: "index_plans_on_tenant_id_and_slug", unique: true
@@ -75,6 +99,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064718) do
     t.string "meta_keywords", limit: 100
     t.bigint "tenant_id"
     t.text "description"
+    t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tenant_id"], name: "index_tenant_settings_on_tenant_id"
@@ -88,12 +113,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_05_064718) do
     t.string "location"
     t.jsonb "lat_lon", default: {"lan" => 0, "lat" => 0}
     t.string "url", limit: 60, null: false
+    t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["url"], name: "index_tenants_on_url", unique: true
     t.index ["uuid"], name: "index_tenants_on_uuid", unique: true
   end
 
+  add_foreign_key "package_prices", "packages"
   add_foreign_key "packages", "plans"
   add_foreign_key "plans", "tenants"
   add_foreign_key "tenant_settings", "tenants"

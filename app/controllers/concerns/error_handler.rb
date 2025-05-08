@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ErrorHandler
   extend ActiveSupport::Concern
 
@@ -23,5 +25,16 @@ module ErrorHandler
         status: 400,
       },
     ), status: :bad_request
+  end
+
+  def handle_argument_error_bak(exception)
+    render json: ErrorBlueprint.render(
+      {
+        errors: {
+          message: exception.message,
+        },
+        status: 500,
+      },
+    ), status: :internal_server_error
   end
 end

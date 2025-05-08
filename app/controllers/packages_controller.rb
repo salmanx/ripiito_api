@@ -19,6 +19,10 @@ class PackagesController < ApplicationController
   private
 
   def package_params
-    params.expect(package: Attributes::PackageAttributes::PACKAGE_ATTRS + [:plan_id])
+    params.require(:package).permit(
+      :plan_id,
+      Attributes::PackageAttributes::PACKAGE_ATTRS,
+      package_price_attributes: Attributes::PackageAttributes::PRICE_ATTRS,
+    )
   end
 end

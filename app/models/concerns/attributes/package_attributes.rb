@@ -9,16 +9,21 @@ module Attributes
       cancelable
       trial_days
       max_subscriber
-      base_price
-      tax_fee
-      taxable
-      is_price_visible
       billing_period
       billing_period_unit
       pricing_type
       pricing_model
       package_type
       exclusive
+    ].freeze
+
+    PRICE_ATTRS = %i[
+      price
+      is_price_visible
+      taxable
+      tax_fee
+      effective_from
+      effective_to
     ].freeze
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Packages::CreatePackageOp do
@@ -12,7 +14,6 @@ RSpec.describe Packages::CreatePackageOp do
       package_type: 'REQUIRED',
       pricing_model: 'FIXED',
       pricing_type: 'RECURRING',
-      base_price: 1000.00,
       plan_id: plan.id,
     }
   end

@@ -7,7 +7,6 @@ FactoryBot.define do
     billing_period_unit { 'MONTH' }
     auto_renewable { false }
     cancelable { true }
-    base_price { 100.00 }
     status { 'DRAFT' }
     package_type { 'REQUIRED' }
     pricing_model { 'FIXED' }
