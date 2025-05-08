@@ -27,7 +27,7 @@ module ErrorHandler
     ), status: :bad_request
   end
 
-  def handle_argument_error_bak(exception)
+  def handle_argument_error(exception)
     render json: ErrorBlueprint.render(
       {
         errors: {
