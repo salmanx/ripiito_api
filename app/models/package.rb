@@ -17,6 +17,7 @@ class Package < ApplicationRecord
   validates :pricing_type, presence: true, inclusion: { in: Enum::PackageEnum::PRICING_TYPE.values }
 
   belongs_to :plan
+  delegate :tenant, to: :plan
   has_one :package_price, dependent: :destroy
   accepts_nested_attributes_for :package_price
 end

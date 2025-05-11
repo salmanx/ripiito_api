@@ -1,16 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead
-# of editing this file, please use the migrations feature of Active Record to
-# incrementally modify your database, and then regenerate this schema definition.
-#
-# This file is the source Rails uses to define your schema when running `bin/rails
-# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
-# be faster and is potentially less error prone than running all of your
-# migrations from scratch. Old migrations may fail to apply correctly if those
-# migrations use external dependencies or application code.
-#
-# It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema[8.0].define(version: 2025_05_07_120324) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -21,10 +9,67 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_120324) do
   create_enum "currency_code", ["JPY", "USD", "EUR"]
   create_enum "package_status", ["DRAFT", "ACTIVE", "RETIRED"]
   create_enum "package_type", ["REQUIRED", "OPTIONAL", "ADDON"]
+  create_enum "payment_method", ["CARD", "EXTERNAL", "COD"]
   create_enum "plan_status", ["DRAFT", "ACTIVE", "RETIRED"]
   create_enum "pricing_model", ["FIXED", "TIRED", "VOLUME"]
   create_enum "pricing_type", ["ONE_TIME", "RECURRING", "USAGE"]
   create_enum "product_type", ["PHYSICAL", "SERVICE", "DIGITAL"]
+
+  create_table "member_package_payments", force: :cascade do |t|
+    t.bigint "member_package_id"
+    t.string "payment_status"
+    t.string "amount_total"
+    t.string "currency"
+    t.string "customer_id"
+    t.string "payment_id"
+    t.string "customer_email"
+    t.jsonb "charges"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_package_id"], name: "index_member_package_payments_on_member_package_id"
+  end
+
+  create_table "member_package_purchases", force: :cascade do |t|
+    t.bigint "member_package_id"
+    t.bigint "member_package_payment_id"
+    t.datetime "payment_date"
+    t.datetime "next_payment_date"
+    t.integer "billing_cycle"
+    t.integer "current_billing_cycle"
+    t.boolean "is_external_paid", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_package_id"], name: "index_member_package_purchases_on_member_package_id"
+    t.index ["member_package_payment_id"], name: "index_member_package_purchases_on_member_package_payment_id"
+  end
+
+  create_table "member_packages", force: :cascade do |t|
+    t.bigint "member_id"
+    t.bigint "package_id"
+    t.enum "payment_method", default: "CARD", null: false, enum_type: "payment_method"
+    t.decimal "purchase_price"
+    t.decimal "tax"
+    t.decimal "total_price"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id", "package_id"], name: "index_member_packages_on_member_id_and_package_id", unique: true
+    t.index ["member_id"], name: "index_member_packages_on_member_id"
+    t.index ["package_id"], name: "index_member_packages_on_package_id"
+  end
+
+  create_table "members", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "fullname", limit: 40
+    t.string "username", limit: 20
+    t.string "email", limit: 40, null: false
+    t.string "password", limit: 80
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_members_on_tenant_id"
+    t.index ["uuid"], name: "index_members_on_uuid", unique: true
+  end
 
   create_table "package_prices", force: :cascade do |t|
     t.decimal "price", default: "0.0", null: false
@@ -120,6 +165,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_120324) do
     t.index ["uuid"], name: "index_tenants_on_uuid", unique: true
   end
 
+  add_foreign_key "member_package_payments", "member_packages"
+  add_foreign_key "member_package_purchases", "member_package_payments"
+  add_foreign_key "member_package_purchases", "member_packages"
+  add_foreign_key "member_packages", "members"
+  add_foreign_key "member_packages", "packages"
+  add_foreign_key "members", "tenants"
   add_foreign_key "package_prices", "packages"
   add_foreign_key "packages", "plans"
   add_foreign_key "plans", "tenants"
