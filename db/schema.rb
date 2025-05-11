@@ -1,3 +1,15 @@
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
+#
+# It's strongly recommended that you check this file into your version control system.
+
 ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
@@ -48,7 +60,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.bigint "package_id"
     t.enum "payment_method", default: "CARD", null: false, enum_type: "payment_method"
     t.decimal "purchase_price"
-    t.decimal "tax"
+    t.decimal "tax_fee"
     t.decimal "total_price"
     t.boolean "active", default: false
     t.datetime "created_at", null: false
@@ -67,15 +79,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.bigint "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_members_on_email", unique: true
     t.index ["tenant_id"], name: "index_members_on_tenant_id"
     t.index ["uuid"], name: "index_members_on_uuid", unique: true
   end
 
   create_table "package_prices", force: :cascade do |t|
-    t.decimal "price", default: "0.0", null: false
+    t.decimal "price", null: false
     t.boolean "is_price_visible", default: true
     t.boolean "taxable", default: false
-    t.decimal "tax_fee", default: "0.0"
+    t.decimal "tax_fee"
     t.datetime "effective_from", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "effective_to"
     t.bigint "package_id"
@@ -87,12 +100,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
 
   create_table "packages", force: :cascade do |t|
     t.string "name", limit: 100, null: false
-    t.string "slug", limit: 200
+    t.string "slug", limit: 200, null: false
     t.integer "billing_period"
     t.boolean "auto_renewable", default: false
     t.boolean "cancelable", default: true
     t.integer "trial_days", default: 0
-    t.integer "max_subscriber"
+    t.integer "max_subscribe"
     t.jsonb "geo_availability"
     t.jsonb "metadata"
     t.boolean "exclusive", default: true
@@ -107,11 +120,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.datetime "updated_at", null: false
     t.index ["plan_id", "slug"], name: "index_packages_on_plan_id_and_slug", unique: true
     t.index ["plan_id"], name: "index_packages_on_plan_id"
+    t.index ["slug"], name: "index_packages_on_slug", unique: true
   end
 
   create_table "plans", force: :cascade do |t|
     t.string "name", limit: 100, null: false
-    t.string "slug", limit: 200
+    t.string "slug", limit: 200, null: false
     t.integer "duration", null: false
     t.boolean "auto_renewable", default: false
     t.boolean "cancelable", default: true
@@ -126,6 +140,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_plans_on_slug", unique: true
     t.index ["tenant_id", "slug"], name: "index_plans_on_tenant_id_and_slug", unique: true
     t.index ["tenant_id"], name: "index_plans_on_tenant_id"
   end
@@ -153,7 +168,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
   create_table "tenants", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "name", limit: 40
-    t.string "slug", limit: 80
     t.string "ip", limit: 60
     t.string "location"
     t.jsonb "lat_lon", default: {"lan" => 0, "lat" => 0}

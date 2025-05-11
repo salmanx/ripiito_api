@@ -5,7 +5,7 @@ class CreateMemberPackages < ActiveRecord::Migration[8.0]
       t.references :package, index: true, foreign_key: true
       t.column :payment_method, :payment_method, default: 'CARD', null: false
       t.decimal :purchase_price
-      t.decimal :tax
+      t.decimal :tax_fee
       t.decimal :total_price
       t.boolean :active, default: false
 

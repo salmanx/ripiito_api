@@ -56,19 +56,19 @@ module Tenants
       errors.add(:ip, 'must be a valid ip')
     end
 
-    def validate_lat_lon_cordinates(lat_lon)
-      if lat_lon.is_a?(Hash)
-        lat = lat_lon[:lat]
-        lon = lat_lon[:lon]
+    # def validate_lat_lon_cordinates(lat_lon)
+    #   if lat_lon.is_a?(Hash)
+    #     lat = lat_lon[:lat]
+    #     lon = lat_lon[:lon]
 
-        errors.add(:lat_lon, 'must be a number between -90 and 90') unless lat.is_a?(Numeric) && lat.between?(-90, 90)
+    #     errors.add(:lat_lon, 'must be a number between -90 and 90') unless lat.is_a?(Numeric) && lat.between?(-90, 90)
 
-        unless lon.is_a?(Numeric) && lon.between?(-180, 180)
-          errors.add(:lat_lon, 'must be a number between -180 and 180')
-        end
-      else
-        errors.add(:lat_lon, 'must be an object with lat and lon key')
-      end
-    end
+    #     unless lon.is_a?(Numeric) && lon.between?(-180, 180)
+    #       errors.add(:lat_lon, 'must be a number between -180 and 180')
+    #     end
+    #   else
+    #     errors.add(:lat_lon, 'must be an object with lat and lon key')
+    #   end
+    # end
   end
 end
