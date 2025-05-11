@@ -11,13 +11,12 @@ class Package < ApplicationRecord
   validates :auto_renewable, inclusion: { in: [true, false] }
   validates :cancelable, inclusion: { in: [true, false] }
   validates :trial_days, numericality: { only_integer: true }, allow_nil: true
-  validates :max_subscriber, numericality: { only_integer: true }, allow_nil: true
   validates :package_type, presence: true, inclusion: { in: Enum::PackageEnum::PACKAGE_TYPE.values }
   validates :pricing_model, presence: true, inclusion: { in: Enum::PackageEnum::PRICING_MODEL.values }
   validates :pricing_type, presence: true, inclusion: { in: Enum::PackageEnum::PRICING_TYPE.values }
 
   belongs_to :plan
-  delegate :tenant, to: :plan
+  # delegate :tenant, to: :plan
   has_one :package_price, dependent: :destroy
   accepts_nested_attributes_for :package_price
 end

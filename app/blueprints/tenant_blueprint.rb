@@ -6,7 +6,6 @@ class TenantBlueprint < Blueprint
 
   fields(
     :name,
-    :slug,
     :ip,
     :location,
     :lat_lon,

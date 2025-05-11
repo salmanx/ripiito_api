@@ -41,4 +41,19 @@ module ErrorHandler
       },
     ), status: :internal_server_error
   end
+
+  # Handle if violated duplicate key constraint for uniq key index
+  def handle_duplicate_key_constraint(exception)
+    # exception.message[/DETAIL:\s+(.*)$/, 1]
+    # exception.message.sub(/DETAIL:.*\z/m, '').strip
+
+    render json: ErrorBlueprint.render(
+      {
+        errors: {
+          message: 'Violates uniqueness', # hide exception.message as it expose id
+        },
+        status: 500,
+      },
+    ), status: :internal_server_error
+  end
 end

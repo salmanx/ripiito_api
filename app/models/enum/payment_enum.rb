@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Enum
   module PaymentEnum
     PAYMENT_METHODS = {

@@ -14,7 +14,6 @@ RSpec.describe PackageBlueprint do
       'auto_renewable',
       'cancelable',
       'trial_days',
-      'max_subscriber',
       'billing_period',
       'billing_period_unit',
       'pricing_type',

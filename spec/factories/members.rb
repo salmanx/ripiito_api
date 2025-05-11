@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :member do
-    fullname { "MyString" }
-    username { "MyString" }
-    email { "MyString" }
-    password { "MyString" }
+    fullname { 'MyString' }
+    username { 'MyString' }
+    email { 'MyString' }
+    password { 'MyString' }
     tenant { nil }
   end
 end
