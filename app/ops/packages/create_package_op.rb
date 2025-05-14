@@ -16,7 +16,7 @@ module Packages
     string  :pricing_model
     string  :pricing_type
     boolean :exclusive, default: false
-    integer :plan_id
+    string :plan_id
 
     object :package_price_attributes, null: true do
       decimal :price

@@ -9,7 +9,7 @@ RSpec.describe TenantsController, type: :controller do
     it 'returns the tenant' do
       get :show, params: { id: tenant.id }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['uuid']).to eq(tenant.uuid)
+      expect(JSON.parse(response.body)['id']).to eq(tenant.id)
     end
   end
 

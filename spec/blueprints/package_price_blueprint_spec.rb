@@ -9,6 +9,7 @@ RSpec.describe PackagePriceBlueprint do
 
   it 'includes the correct fields' do
     expect(parsed).to include(
+      'id',
       'effective_from',
       'effective_to',
       'is_price_visible',
@@ -18,9 +19,5 @@ RSpec.describe PackagePriceBlueprint do
       'created_at',
       'updated_at',
     )
-  end
-
-  it 'excludes the id field' do
-    expect(parsed).not_to have_key('id')
   end
 end

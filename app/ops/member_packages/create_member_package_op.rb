@@ -5,7 +5,7 @@ module MemberPackages
     include Attributes::MemberPackageAttributes
 
     string  :email
-    string  :package_slug
+    string  :package_id
     decimal :purchase_price
     decimal :tax_fee
     decimal :total_price
@@ -17,15 +17,13 @@ module MemberPackages
 
     def perform
       validate_email email
-      validate_package_slug package_slug
 
       member = Member.find_by(email: email)
-      package = Package.find_by(slug: package_slug)
 
-      attrs = extract_attributes(MEMBER_PACKAGE_ATTRS).except(:email, :package_slug)
+      attrs = extract_attributes(MEMBER_PACKAGE_ATTRS).except(:email)
 
       member_package = MemberPackage.new(
-        attrs.merge(member: member, package: package),
+        attrs.merge(member: member),
       )
 
       if member_package.valid?
@@ -42,12 +40,6 @@ module MemberPackages
       return if email.present?
 
       errors.add(:email, "can't be blank!")
-    end
-
-    def validate_package_slug(slug)
-      return if slug.present?
-
-      errors.add(:package_slug, "can't be blank")
     end
   end
 end

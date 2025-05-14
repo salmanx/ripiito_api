@@ -27,8 +27,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
   create_enum "pricing_type", ["ONE_TIME", "RECURRING", "USAGE"]
   create_enum "product_type", ["PHYSICAL", "SERVICE", "DIGITAL"]
 
-  create_table "member_package_payments", force: :cascade do |t|
-    t.bigint "member_package_id"
+  create_table "member_package_payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_package_id"
     t.string "payment_status"
     t.string "amount_total"
     t.string "currency"
@@ -41,9 +41,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.index ["member_package_id"], name: "index_member_package_payments_on_member_package_id"
   end
 
-  create_table "member_package_purchases", force: :cascade do |t|
-    t.bigint "member_package_id"
-    t.bigint "member_package_payment_id"
+  create_table "member_package_purchases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_package_id"
+    t.uuid "member_package_payment_id"
     t.datetime "payment_date"
     t.datetime "next_payment_date"
     t.integer "billing_cycle"
@@ -55,9 +55,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.index ["member_package_payment_id"], name: "index_member_package_purchases_on_member_package_payment_id"
   end
 
-  create_table "member_packages", force: :cascade do |t|
-    t.bigint "member_id"
-    t.bigint "package_id"
+  create_table "member_packages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.uuid "package_id"
     t.enum "payment_method", default: "CARD", null: false, enum_type: "payment_method"
     t.decimal "purchase_price"
     t.decimal "tax_fee"
@@ -70,35 +70,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.index ["package_id"], name: "index_member_packages_on_package_id"
   end
 
-  create_table "members", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+  create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "fullname", limit: 40
     t.string "username", limit: 20
     t.string "email", limit: 40, null: false
     t.string "password", limit: 80
-    t.bigint "tenant_id"
+    t.uuid "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_members_on_email", unique: true
     t.index ["tenant_id"], name: "index_members_on_tenant_id"
-    t.index ["uuid"], name: "index_members_on_uuid", unique: true
   end
 
-  create_table "package_prices", force: :cascade do |t|
+  create_table "package_prices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "price", null: false
     t.boolean "is_price_visible", default: true
     t.boolean "taxable", default: false
     t.decimal "tax_fee"
     t.datetime "effective_from", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "effective_to"
-    t.bigint "package_id"
+    t.uuid "package_id"
     t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["package_id"], name: "index_package_prices_on_package_id"
   end
 
-  create_table "packages", force: :cascade do |t|
+  create_table "packages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "slug", limit: 200, null: false
     t.integer "billing_period"
@@ -114,7 +112,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.enum "pricing_type", default: "RECURRING", null: false, enum_type: "pricing_type"
     t.enum "pricing_model", default: "FIXED", null: false, enum_type: "pricing_model"
     t.enum "package_type", default: "REQUIRED", null: false, enum_type: "package_type"
-    t.bigint "plan_id"
+    t.uuid "plan_id"
     t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -123,7 +121,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.index ["slug"], name: "index_packages_on_slug", unique: true
   end
 
-  create_table "plans", force: :cascade do |t|
+  create_table "plans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "slug", limit: 200, null: false
     t.integer "duration", null: false
@@ -136,7 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.jsonb "metadata"
     t.boolean "exclusive", default: true
     t.enum "status", default: "DRAFT", null: false, enum_type: "plan_status"
-    t.bigint "tenant_id"
+    t.uuid "tenant_id"
     t.bigint "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -145,7 +143,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.index ["tenant_id"], name: "index_plans_on_tenant_id"
   end
 
-  create_table "tenant_settings", force: :cascade do |t|
+  create_table "tenant_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "logo_url"
     t.string "favicon_url"
     t.string "text_color", limit: 25
@@ -157,7 +155,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.string "meta_author", limit: 20
     t.string "meta_description", limit: 100
     t.string "meta_keywords", limit: 100
-    t.bigint "tenant_id"
+    t.uuid "tenant_id"
     t.text "description"
     t.bigint "created_by"
     t.datetime "created_at", null: false
@@ -165,8 +163,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.index ["tenant_id"], name: "index_tenant_settings_on_tenant_id"
   end
 
-  create_table "tenants", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+  create_table "tenants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", limit: 40
     t.string "ip", limit: 60
     t.string "location"
@@ -176,7 +173,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_081613) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["url"], name: "index_tenants_on_url", unique: true
-    t.index ["uuid"], name: "index_tenants_on_uuid", unique: true
   end
 
   add_foreign_key "member_package_payments", "member_packages"

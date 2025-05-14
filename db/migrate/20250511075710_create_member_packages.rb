@@ -2,9 +2,9 @@
 
 class CreateMemberPackages < ActiveRecord::Migration[8.0]
   def change
-    create_table :member_packages do |t|
-      t.references :member, index: true, foreign_key: true
-      t.references :package, index: true, foreign_key: true
+    create_table :member_packages, id: :uuid do |t|
+      t.references :member, type: :uuid, index: true, foreign_key: true
+      t.references :package, type: :uuid, index: true, foreign_key: true
       t.column :payment_method, :payment_method, default: 'CARD', null: false
       t.decimal :purchase_price
       t.decimal :tax_fee

@@ -2,7 +2,7 @@
 
 class CreatePlans < ActiveRecord::Migration[8.0]
   def change
-    create_table :plans do |t|
+    create_table :plans, id: :uuid do |t|
       t.string :name, limit: 100, null: false
       t.string :slug, limit: 200, null: false, index: { unique: true }
       t.integer :duration, null: false
@@ -15,7 +15,7 @@ class CreatePlans < ActiveRecord::Migration[8.0]
       t.jsonb :metadata
       t.boolean :exclusive, default: true
       t.column :status, :plan_status, default: 'DRAFT', null: false
-      t.references :tenant, index: true, foreign_key: true
+      t.references :tenant, type: :uuid, index: true, foreign_key: true
       t.bigint :created_by
 
       t.timestamps

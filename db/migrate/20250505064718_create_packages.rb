@@ -2,7 +2,7 @@
 
 class CreatePackages < ActiveRecord::Migration[8.0]
   def change
-    create_table :packages do |t|
+    create_table :packages, id: :uuid do |t|
       t.string :name, limit: 100, null: false
       t.string :slug, limit: 200, null: false, index: { unique: true }
       t.integer :billing_period
@@ -18,10 +18,8 @@ class CreatePackages < ActiveRecord::Migration[8.0]
       t.column :pricing_type, :pricing_type, default: 'RECURRING', null: false
       t.column :pricing_model, :pricing_model, default: 'FIXED', null: false
       t.column :package_type, :package_type, default: 'REQUIRED', null: false
-
-      t.references :plan, index: true, foreign_key: true
+      t.references :plan, type: :uuid, index: true, foreign_key: true
       t.bigint :created_by
-
       t.timestamps
     end
     add_index :packages, %i[plan_id slug], unique: true

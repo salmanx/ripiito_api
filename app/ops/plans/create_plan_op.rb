@@ -14,7 +14,7 @@ module Plans
     integer :max_subscriber
     boolean :exclusive, default: false
 
-    integer :tenant_id
+    string :tenant_id
 
     outputs :plan
 

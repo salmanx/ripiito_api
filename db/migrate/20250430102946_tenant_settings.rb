@@ -2,7 +2,7 @@
 
 class TenantSettings < ActiveRecord::Migration[8.0]
   def change
-    create_table :tenant_settings do |t|
+    create_table :tenant_settings, id: :uuid do |t|
       t.string :logo_url, null: true
       t.string :favicon_url, null: true
       t.string :text_color, null: true, limit: 25
@@ -14,7 +14,7 @@ class TenantSettings < ActiveRecord::Migration[8.0]
       t.string :meta_author, null: true, limit: 20
       t.string :meta_description, null: true, limit: 100
       t.string :meta_keywords, null: true, limit: 100
-      t.references :tenant, index: true, foreign_key: true
+      t.references :tenant, type: :uuid, index: true, foreign_key: true
       t.text :description, null: true
       t.bigint :created_by
 

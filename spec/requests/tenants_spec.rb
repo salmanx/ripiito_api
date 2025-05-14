@@ -31,7 +31,7 @@ RSpec.describe 'Tenants API', type: :request do
     it 'returns a tenant' do
       get tenant_path(tenant.id)
       expect(response).to have_http_status(:ok)
-      expect(json_response['uuid']).to eq(tenant.uuid)
+      expect(json_response['id']).to eq(tenant.id)
     end
   end
 

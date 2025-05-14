@@ -6,4 +6,5 @@ class ApplicationController < ActionController::API
   rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
   rescue_from ArgumentError, with: :handle_argument_error
   rescue_from ActiveRecord::RecordNotUnique, with: :handle_duplicate_key_constraint
+  rescue_from NoMethodError, with: :handle_no_method_error
 end
