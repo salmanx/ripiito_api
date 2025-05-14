@@ -2,10 +2,11 @@
 
 FactoryBot.define do
   factory :member do
-    fullname { 'MyString' }
-    username { 'MyString' }
-    email { 'MyString' }
-    password { 'MyString' }
-    tenant { nil }
+    fullname { Faker::Name.name[0..10] }
+    username { Faker::Name.unique.name[0..5] }
+    email { Faker::Internet.email[0..20] }
+    password { 'secret' }
+
+    association :tenant
   end
 end

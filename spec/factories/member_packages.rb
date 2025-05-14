@@ -2,12 +2,13 @@
 
 FactoryBot.define do
   factory :member_package do
-    member { nil }
-    package { nil }
-    payment_method { 'MyString' }
-    purchase_price { 'MyString' }
-    tax { 'MyString' }
-    total_price { 'MyString' }
-    status { 'MyString' }
+    payment_method { 'CARD' }
+    purchase_price { 100.00 }
+    tax_fee { 0.0 }
+    total_price { 100.00 }
+    active { true }
+
+    association :package
+    association :member
   end
 end
