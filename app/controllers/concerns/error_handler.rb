@@ -13,6 +13,12 @@ module ErrorHandler
     ), status: :not_found
   end
 
+  # Handle validation errors globally for saving a record using create! or save!
+  def render_record_not_valid_response(exception)
+    record = exception.record
+    render json: ErrorBlueprint.render({ errors: record.errors, status: 409 }), status: :conflict
+  end
+
   # Model validation error
   def render_error_response(errors)
     render json: ErrorBlueprint.render({ errors: errors, status: 409 }), status: :conflict
