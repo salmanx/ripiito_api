@@ -22,6 +22,9 @@ gem 'rack-cors'
 gem 'blueprinter', '~> 1.1', '>= 1.1.2'
 gem 'subroutine', '~> 4.4'
 
+gem 'bcrypt'
+gem 'jwt'
+
 group :development, :test do
   gem 'brakeman', require: false
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
